@@ -67,6 +67,9 @@ public class AccountSettings extends HttpServlet {
         Users.save(newUser);
         final HttpSession session = req.getSession();
         session.setAttribute(Principal.class.getName(), newUser);
+        if (twoFactorAuthentication) {
+            session.setAttribute("twoFactorAuthenticated", "true");
+        }
         resp.sendRedirect(req.getContextPath() + "/account_settings");
     }
 }

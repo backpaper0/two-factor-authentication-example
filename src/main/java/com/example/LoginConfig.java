@@ -38,5 +38,25 @@ public class LoginConfig implements ServletContextListener {
                 SecurityFilter.class);
         securityFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/*");
         securityFilter.setInitParameter(SecurityFilter.LOGIN_PATH_KEY, "/login");
+
+        final FilterRegistration.Dynamic twoFactorAuthenticator = sc
+                .addFilter("twoFactorAuthenticator", TwoFactorAuthenticator.class);
+        twoFactorAuthenticator.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false,
+                "/two_factor_authentication");
+        twoFactorAuthenticator.setInitParameter(TwoFactorAuthenticator.SUCCESS_PATH_KEY, "/");
+        twoFactorAuthenticator.setInitParameter(TwoFactorAuthenticator.FAILURE_PATH_KEY,
+                "/two_factor_authentication");
+
+        final FilterRegistration.Dynamic twoFactorAuthenticationSecurityFilter = sc.addFilter(
+                "twoFactorAuthenticationSecurityFilter",
+                TwoFactorAuthenticationSecurityFilter.class);
+        twoFactorAuthenticationSecurityFilter.addMappingForUrlPatterns(
+                EnumSet.of(DispatcherType.REQUEST),
+                false,
+                "/*");
+        twoFactorAuthenticationSecurityFilter.setInitParameter(
+                TwoFactorAuthenticationSecurityFilter.TWO_FACTOR_AUTHENTICATION_PATH_KEY,
+                "/two_factor_authentication");
+
     }
 }
