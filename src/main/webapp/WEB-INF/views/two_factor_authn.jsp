@@ -11,7 +11,7 @@
   <body>
     <h1>2要素認証</h1>
     <form method="POST">
-      <p><input type="text" name="otp" placeholder="ワンタイムパスワード"></p>
+      <p><input type="text" name="otp" placeholder="ワンタイムパスワード" autofocus></p>
       <p><button type="submit">2要素認証する</button></p>
     </form>
   </body>

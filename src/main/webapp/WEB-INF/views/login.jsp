@@ -11,7 +11,7 @@
   <body>
     <h1>ログイン</h1>
     <form method="POST">
-      <p><input type="text" name="username" placeholder="ユーザーID"></p>
+      <p><input type="text" name="username" placeholder="ユーザーID" autofocus></p>
       <p><input type="password" name="password" placeholder="パスワード"></p>
       <p><button type="submit">ログインする</button></p>
     </form>
