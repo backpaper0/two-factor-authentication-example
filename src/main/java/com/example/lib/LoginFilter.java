@@ -1,7 +1,6 @@
 package com.example.lib;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.security.Principal;
 
@@ -51,27 +50,7 @@ public class LoginFilter implements Filter {
 
         if (req.getMethod().equals("GET")) {
             resp.setContentType("text/html; charset=UTF-8");
-            try (PrintWriter out = resp.getWriter()) {
-                out.printf("<!doctype html>%n");
-                out.printf("<html lang=\"ja\">%n");
-                out.printf("  <head>%n");
-                out.printf("    <meta charset=\"utf-8\">%n");
-                out.printf(
-                        "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">%n");
-                out.printf("    <title>ログイン - 2要素認証example</title>%n");
-                out.printf("  </head>%n");
-                out.printf("  <body>%n");
-                out.printf("    <h1>ログイン</h1>%n");
-                out.printf("    <form method=\"POST\">%n");
-                out.printf(
-                        "      <p><input type=\"text\" name=\"username\" placeholder=\"ユーザーID\"></p>%n");
-                out.printf(
-                        "      <p><input type=\"password\" name=\"password\" placeholder=\"パスワード\"></p>%n");
-                out.printf("      <p><button type=\"submit\">ログインする</button></p>%n");
-                out.printf("    </nav>%n");
-                out.printf("  </body>%n");
-                out.printf("</html>%n");
-            }
+            req.getRequestDispatcher("WEB-INF/views/login.jsp").forward(req, resp);
 
         } else if (req.getMethod().equals("POST")) {
             final String username = req.getParameter("username");
