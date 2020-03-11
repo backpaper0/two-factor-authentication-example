@@ -2,12 +2,14 @@ package com.example;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.Principal;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet(urlPatterns = "/account_settings")
 public class AccountSettings extends HttpServlet {
@@ -17,6 +19,9 @@ public class AccountSettings extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
             throws ServletException, IOException {
+        final User user = (User) req.getUserPrincipal();
+        final boolean twoFactorAuthentication = user.isTwoFactorAuthentication();
+
         resp.setContentType("text/html; charset=UTF-8");
         try (PrintWriter out = resp.getWriter()) {
             out.printf("<!doctype html>%n");
@@ -35,7 +40,6 @@ public class AccountSettings extends HttpServlet {
             out.printf("    <h1>アカウント設定</h1>%n");
             out.printf("    <form method=\"POST\">%n");
             out.printf("      <p>%n");
-            final boolean twoFactorAuthentication = false;
             out.printf("        <label>%n");
             out.printf("          <input type=\"radio\" name=\"%s\" value=\"true\"%s>二要素認証あり%n",
                     inputName, twoFactorAuthentication ? " checked" : "");
@@ -57,9 +61,12 @@ public class AccountSettings extends HttpServlet {
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
             throws ServletException, IOException {
-
-        System.out.println(req.getParameter(inputName));
-
+        final boolean twoFactorAuthentication = Boolean.parseBoolean(req.getParameter(inputName));
+        final User user = (User) req.getUserPrincipal();
+        final User newUser = user.withTwoFactorAuthentication(twoFactorAuthentication);
+        Users.save(newUser);
+        final HttpSession session = req.getSession();
+        session.setAttribute(Principal.class.getName(), newUser);
         resp.sendRedirect(req.getContextPath() + "/account_settings");
     }
 }

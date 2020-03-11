@@ -2,6 +2,7 @@ package com.example;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.Principal;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,7 +17,8 @@ public class Home extends HttpServlet {
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
             throws ServletException, IOException {
 
-        final String name = "うらがみ";
+        final Principal user = req.getUserPrincipal();
+        final String name = user.getName();
 
         resp.setContentType("text/html; charset=UTF-8");
         try (PrintWriter out = resp.getWriter()) {

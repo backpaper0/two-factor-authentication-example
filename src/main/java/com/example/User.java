@@ -29,6 +29,10 @@ public class User implements Principal {
         return password.equals(testMe);
     }
 
+    public User withTwoFactorAuthentication(final boolean twoFactorAuthentication) {
+        return new User(username, password, twoFactorAuthentication);
+    }
+
     public User copy() {
         return new User(username, password, twoFactorAuthentication);
     }

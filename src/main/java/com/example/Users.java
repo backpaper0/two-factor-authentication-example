@@ -11,7 +11,7 @@ public class Users {
 
     static {
         save(new User("foo", "secret", true));
-        save(new User("bar", "secret", true));
+        save(new User("bar", "secret", false));
     }
 
     public static synchronized Optional<User> find(final String username) {
