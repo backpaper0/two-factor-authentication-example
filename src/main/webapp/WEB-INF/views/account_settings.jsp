@@ -13,13 +13,13 @@
     <form method="POST">
       <p>
         <label>
-          <input type="radio" name="twoFactorAuthz" value="true"
-            <c:if test="${twoFactorAuthz}"> checked</c:if>>
+          <input type="radio" name="twoFactorAuthN" value="true"
+            <c:if test="${twoFactorAuthN}"> checked</c:if>>
           2要素認証あり
         </label>
         <label>
-          <input type="radio" name="twoFactorAuthz" value="false"
-            <c:if test="${not twoFactorAuthz}"> checked</c:if>>
+          <input type="radio" name="twoFactorAuthN" value="false"
+            <c:if test="${not twoFactorAuthN}"> checked</c:if>>
           2要素認証なし
         </label>
       </p>

@@ -18,8 +18,8 @@ public class Home extends HttpServlet {
             throws ServletException, IOException {
 
         final User user = User.get(req);
-        final String name = user.getName();
-        req.setAttribute("name", name);
+        final String username = user.getUsername();
+        req.setAttribute("username", username);
 
         resp.setContentType("text/html; charset=UTF-8");
         req.getRequestDispatcher("WEB-INF/views/home.jsp").forward(req, resp);

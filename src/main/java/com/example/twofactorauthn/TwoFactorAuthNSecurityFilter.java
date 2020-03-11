@@ -29,7 +29,7 @@ public class TwoFactorAuthNSecurityFilter implements Filter {
 
         final User user = User.get(req);
 
-        if (user.isTwoFactorAuthentication() == false || isTwoFactorAuthenticated(req)) {
+        if (user.isTwoFactorAutheN() == false || isTwoFactorAuthenticated(req)) {
             chain.doFilter(request, response);
             return;
         }

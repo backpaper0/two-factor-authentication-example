@@ -10,7 +10,7 @@
   </head>
   <body>
     <h1>ホーム</h1>
-    <p>こんにちは、${fn:escapeXml(name)}さん！</p>
+    <p>こんにちは、${fn:escapeXml(username)}さん！</p>
     <nav>
       <ul>
         <li><a href="${application.contextPath}/account_settings">アカウント設定</a></li>

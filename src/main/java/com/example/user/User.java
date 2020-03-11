@@ -1,22 +1,30 @@
 package com.example.user;
 
-import java.security.Principal;
 import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-public class User implements Principal {
+import com.example.otp.TimeBasedOneTimePasswordGenerator;
+
+public class User {
+
+    private static final TimeBasedOneTimePasswordGenerator otpGenerator = TimeBasedOneTimePasswordGenerator
+            .builder()
+            .algorithm("HmacSHA1")
+            .build();
 
     private final String username;
     private final String password;
-    private final boolean twoFactorAuthentication;
+    private final boolean twoFactorAuthN;
+    private final byte[] key;
 
-    public User(final String username, final String password,
-            final boolean twoFactorAuthentication) {
+    public User(final String username, final String password, final boolean twoFactorAuthN,
+            final byte[] key) {
         this.username = Objects.requireNonNull(username);
         this.password = Objects.requireNonNull(password);
-        this.twoFactorAuthentication = twoFactorAuthentication;
+        this.twoFactorAuthN = twoFactorAuthN;
+        this.key = key;
     }
 
     public static User get(final HttpServletRequest request) {
@@ -29,44 +37,29 @@ public class User implements Principal {
         session.setAttribute(User.class.getName(), this);
     }
 
-    @Override
-    public String getName() {
+    public String getUsername() {
         return username;
     }
 
-    public boolean isTwoFactorAuthentication() {
-        return twoFactorAuthentication;
+    public boolean isTwoFactorAutheN() {
+        return twoFactorAuthN;
     }
 
     public boolean testPassword(final String testMe) {
         return password.equals(testMe);
     }
 
-    public User withTwoFactorAuthentication(final boolean twoFactorAuthentication) {
-        return new User(username, password, twoFactorAuthentication);
+    public User withTwoFactorAuthentication(final boolean twoFactorAuthN) {
+        return new User(username, password, twoFactorAuthN, key);
     }
 
     public User copy() {
-        return new User(username, password, twoFactorAuthentication);
+        return new User(username, password, twoFactorAuthN, key);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(username, password, twoFactorAuthentication);
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (obj == this) {
-            return true;
-        } else if (obj == null) {
-            return false;
-        } else if (obj.getClass() != getClass()) {
-            return false;
-        }
-        final User other = (User) obj;
-        return username.equals(other.username)
-                && password.equals(other.password)
-                && twoFactorAuthentication == other.twoFactorAuthentication;
+    public boolean testTwoFactorAuthN(final String code) {
+        final int generated = otpGenerator.generate(key);
+        final String formatted = String.format("%06d", generated);
+        return formatted.equals(code);
     }
 }

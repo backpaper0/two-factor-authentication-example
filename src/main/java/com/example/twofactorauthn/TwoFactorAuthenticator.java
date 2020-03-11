@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.example.user.User;
+
 /**
  * 2要素認証画面の表示と2要素認証処理を行う。
  *
@@ -33,8 +35,9 @@ public class TwoFactorAuthenticator implements Filter {
         }
 
         if (req.getMethod().equals("POST")) {
+            final User user = User.get(req);
             final String code = req.getParameter("code");
-            if (code.equals("000000")) { //TODO
+            if (user.testTwoFactorAuthN(code)) { //TODO
                 session.setAttribute("twoFactorAuthenticated", new Object());
                 resp.sendRedirect(req.getContextPath() + "/");
             } else {
