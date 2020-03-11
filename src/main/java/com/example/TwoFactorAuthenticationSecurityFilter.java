@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -13,16 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class TwoFactorAuthenticationSecurityFilter implements Filter {
-
-    public static final String TWO_FACTOR_AUTHENTICATION_PATH_KEY = "twoFactorAuthenticationPath";
-
-    private String twoFactorAuthenticationPath;
-
-    @Override
-    public void init(final FilterConfig filterConfig) throws ServletException {
-        twoFactorAuthenticationPath = filterConfig
-                .getInitParameter(TWO_FACTOR_AUTHENTICATION_PATH_KEY);
-    }
 
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response,
@@ -38,7 +27,7 @@ public class TwoFactorAuthenticationSecurityFilter implements Filter {
                 .getAttribute("twoFactorAuthenticated");
 
         if (user.isTwoFactorAuthentication() && twoFactorAuthenticated == null) {
-            resp.sendRedirect(req.getContextPath() + twoFactorAuthenticationPath);
+            resp.sendRedirect(req.getContextPath() + "/two_factor_authz");
             return;
         }
 

@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -13,18 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class TwoFactorAuthenticator implements Filter {
-
-    public static final String SUCCESS_PATH_KEY = "successPath";
-    public static final String FAILURE_PATH_KEY = "failurePath";
-
-    private String successPath;
-    private String failurePath;
-
-    @Override
-    public void init(final FilterConfig filterConfig) throws ServletException {
-        successPath = filterConfig.getInitParameter(SUCCESS_PATH_KEY);
-        failurePath = filterConfig.getInitParameter(FAILURE_PATH_KEY);
-    }
 
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response,
@@ -43,9 +30,9 @@ public class TwoFactorAuthenticator implements Filter {
             final String code = req.getParameter("code");
             if (code.equals("000000")) { //TODO
                 session.setAttribute("twoFactorAuthenticated", "true");
-                resp.sendRedirect(req.getContextPath() + successPath);
+                resp.sendRedirect(req.getContextPath() + "/");
             } else {
-                resp.sendRedirect(req.getContextPath() + failurePath);
+                resp.sendRedirect(req.getRequestURI());
             }
         } else {
             resp.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);

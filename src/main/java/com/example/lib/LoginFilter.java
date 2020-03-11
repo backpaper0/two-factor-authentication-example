@@ -1,12 +1,10 @@
 package com.example.lib;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.security.Principal;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -14,30 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.example.Users;
+
 public class LoginFilter implements Filter {
-
-    public static final String LOGIN_ACTION_CLASS_NAME_KEY = "loginActionClassName";
-    public static final String LOGIN_SUCCESS_PATH_KEY = "loginSuccessPath";
-    public static final String LOGIN_FAILURE_PATH_KEY = "loginFailurePath";
-
-    private LoginAction loginAction;
-    private String loginSuccessPath;
-    private String loginFailurePath;
-
-    @Override
-    public void init(final FilterConfig filterConfig) throws ServletException {
-        try {
-            final String loginActionClassName = filterConfig
-                    .getInitParameter(LOGIN_ACTION_CLASS_NAME_KEY);
-            final Class<?> clazz = Class.forName(loginActionClassName);
-            final Constructor<?> constructor = clazz.getConstructor();
-            loginAction = (LoginAction) constructor.newInstance();
-        } catch (final ReflectiveOperationException e) {
-            throw new ServletException(e);
-        }
-        loginSuccessPath = filterConfig.getInitParameter(LOGIN_SUCCESS_PATH_KEY);
-        loginFailurePath = filterConfig.getInitParameter(LOGIN_FAILURE_PATH_KEY);
-    }
 
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response,
@@ -55,19 +32,19 @@ public class LoginFilter implements Filter {
         } else if (req.getMethod().equals("POST")) {
             final String username = req.getParameter("username");
             final String password = req.getParameter("password");
-            final Principal principal = loginAction.login(username, password);
+            final Principal principal = tryLogin(username, password);
             if (principal != null) {
                 session.setAttribute(Principal.class.getName(), principal);
-                resp.sendRedirect(req.getContextPath() + loginSuccessPath);
+                resp.sendRedirect(req.getContextPath() + "/");
             } else {
-                resp.sendRedirect(req.getContextPath() + loginFailurePath);
+                resp.sendRedirect(req.getRequestURI());
             }
         } else {
             resp.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
         }
     }
 
-    public interface LoginAction {
-        Principal login(String username, String password);
+    private Principal tryLogin(final String username, final String password) {
+        return Users.find(username).filter(a -> a.testPassword(password)).orElse(null);
     }
 }
