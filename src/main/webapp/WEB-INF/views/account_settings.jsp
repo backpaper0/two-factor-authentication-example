@@ -10,6 +10,9 @@
   </head>
   <body>
     <h1>アカウント設定</h1>
+    <c:if test="${optKey != null}">
+      <p>ワンタイムパスワードの鍵：${optKey}</p>
+    </c:if>
     <form method="POST">
       <p>
         <label>

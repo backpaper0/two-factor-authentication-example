@@ -1,5 +1,7 @@
 package com.example.user;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,16 @@ public class User {
             .algorithm("HmacSHA1")
             .build();
 
+    private static final SecureRandom otpKeyGenerator;
+    static {
+        try {
+            //cf. https://docs.oracle.com/javase/jp/8/docs/technotes/guides/security/StandardNames.html#SecureRandom
+            otpKeyGenerator = SecureRandom.getInstance("SHA1PRNG");
+        } catch (final NoSuchAlgorithmException e) {
+            throw new RuntimeException("ありえない", e);
+        }
+    }
+
     private final String username;
     private final String password;
     private final boolean twoFactorAuthN;
@@ -24,6 +36,9 @@ public class User {
         this.username = Objects.requireNonNull(username);
         this.password = Objects.requireNonNull(password);
         this.twoFactorAuthN = twoFactorAuthN;
+        if (twoFactorAuthN) {
+            Objects.requireNonNull(key);
+        }
         this.key = key;
     }
 
@@ -41,7 +56,7 @@ public class User {
         return username;
     }
 
-    public boolean isTwoFactorAutheN() {
+    public boolean isTwoFactorAuthN() {
         return twoFactorAuthN;
     }
 
@@ -49,8 +64,15 @@ public class User {
         return password.equals(testMe);
     }
 
-    public User withTwoFactorAuthentication(final boolean twoFactorAuthN) {
-        return new User(username, password, twoFactorAuthN, key);
+    public User withTwoFactorAuthentication(final boolean newTwoFactorAuthN) {
+        final byte[] newKey = newTwoFactorAuthN ? generateKey() : null;
+        return new User(username, password, newTwoFactorAuthN, newKey);
+    }
+
+    private byte[] generateKey() {
+        final byte[] key = new byte[20];
+        otpKeyGenerator.nextBytes(key);
+        return key;
     }
 
     public User copy() {
@@ -61,5 +83,13 @@ public class User {
         final int generated = otpGenerator.generate(key);
         final String formatted = String.format("%06d", generated);
         return formatted.equals(code);
+    }
+
+    public String getKeyAsHex() {
+        final StringBuilder buf = new StringBuilder();
+        for (final byte b : key) {
+            buf.append(String.format("%02x", b & 0xff));
+        }
+        return buf.toString();
     }
 }
