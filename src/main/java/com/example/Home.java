@@ -1,13 +1,14 @@
 package com.example;
 
 import java.io.IOException;
-import java.security.Principal;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.example.user.User;
 
 @WebServlet(urlPatterns = "/")
 public class Home extends HttpServlet {
@@ -16,7 +17,7 @@ public class Home extends HttpServlet {
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
             throws ServletException, IOException {
 
-        final Principal user = req.getUserPrincipal();
+        final User user = User.get(req);
         final String name = user.getName();
         req.setAttribute("name", name);
 

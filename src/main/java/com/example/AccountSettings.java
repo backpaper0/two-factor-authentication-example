@@ -19,7 +19,7 @@ public class AccountSettings extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp)
             throws ServletException, IOException {
-        final User user = (User) req.getUserPrincipal();
+        final User user = User.get(req);
         final boolean twoFactorAuthz = user.isTwoFactorAuthentication();
         req.setAttribute("twoFactorAuthz", twoFactorAuthz);
 
@@ -31,7 +31,7 @@ public class AccountSettings extends HttpServlet {
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp)
             throws ServletException, IOException {
         final boolean twoFactorAuthz = Boolean.parseBoolean(req.getParameter("twoFactorAuthz"));
-        final User user = (User) req.getUserPrincipal();
+        final User user = User.get(req);
         final User newUser = user.withTwoFactorAuthentication(twoFactorAuthz);
         Users.save(newUser);
         final HttpSession session = req.getSession();

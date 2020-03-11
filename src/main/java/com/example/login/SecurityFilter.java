@@ -10,6 +10,12 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.user.User;
+
+/**
+ * ログイン済みのユーザーのみ通すフィルター。
+ *
+ */
 public class SecurityFilter implements Filter {
 
     @Override
@@ -29,6 +35,6 @@ public class SecurityFilter implements Filter {
     }
 
     private boolean isLoggedIn(final HttpServletRequest req) {
-        return req.getUserPrincipal() != null;
+        return User.get(req) != null;
     }
 }

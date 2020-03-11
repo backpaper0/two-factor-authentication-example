@@ -11,7 +11,6 @@ import javax.servlet.annotation.WebListener;
 
 import com.example.login.LoginFilter;
 import com.example.login.SecurityFilter;
-import com.example.login.UserPrincipalBindFilter;
 import com.example.twofactorauthn.TwoFactorAuthNSecurityFilter;
 import com.example.twofactorauthn.TwoFactorAuthenticator;
 
@@ -26,11 +25,6 @@ public class FilterConfig implements ServletContextListener {
         final FilterRegistration.Dynamic loginFilter = sc
                 .addFilter(LoginFilter.class.getSimpleName(), LoginFilter.class);
         loginFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "/login");
-
-        final FilterRegistration.Dynamic userPrincipalBindFilter = sc.addFilter(
-                UserPrincipalBindFilter.class.getSimpleName(), UserPrincipalBindFilter.class);
-        userPrincipalBindFilter.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), false,
-                "/*");
 
         final FilterRegistration.Dynamic securityFilter = sc
                 .addFilter(SecurityFilter.class.getSimpleName(), SecurityFilter.class);

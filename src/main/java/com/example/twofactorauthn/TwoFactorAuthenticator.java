@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * 2要素認証画面の表示と2要素認証処理を行う。
+ *
+ */
 public class TwoFactorAuthenticator implements Filter {
 
     @Override
@@ -25,17 +29,20 @@ public class TwoFactorAuthenticator implements Filter {
         if (req.getMethod().equals("GET")) {
             resp.setContentType("text/html; charset=UTF-8");
             req.getRequestDispatcher("WEB-INF/views/two_factor_authn.jsp").forward(req, resp);
+            return;
+        }
 
-        } else if (req.getMethod().equals("POST")) {
+        if (req.getMethod().equals("POST")) {
             final String code = req.getParameter("code");
             if (code.equals("000000")) { //TODO
-                session.setAttribute("twoFactorAuthenticated", "true");
+                session.setAttribute("twoFactorAuthenticated", new Object());
                 resp.sendRedirect(req.getContextPath() + "/");
             } else {
                 resp.sendRedirect(req.getRequestURI());
             }
-        } else {
-            resp.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+            return;
         }
+
+        resp.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
     }
 }

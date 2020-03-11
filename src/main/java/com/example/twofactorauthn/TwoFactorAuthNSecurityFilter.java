@@ -13,6 +13,10 @@ import javax.servlet.http.HttpSession;
 
 import com.example.user.User;
 
+/**
+ * 2要素認証済みのユーザー、もしくは2要素認証をOFFにしているユーザーを通すフィルター。
+ *
+ */
 public class TwoFactorAuthNSecurityFilter implements Filter {
 
     @Override
@@ -22,17 +26,26 @@ public class TwoFactorAuthNSecurityFilter implements Filter {
 
         final HttpServletRequest req = (HttpServletRequest) request;
         final HttpServletResponse resp = (HttpServletResponse) response;
-        final HttpSession session = req.getSession();
 
-        final User user = (User) req.getUserPrincipal();
-        final String twoFactorAuthenticated = (String) session
-                .getAttribute("twoFactorAuthenticated");
+        final User user = User.get(req);
 
-        if (user.isTwoFactorAuthentication() && twoFactorAuthenticated == null) {
-            resp.sendRedirect(req.getContextPath() + "/two_factor_authn");
+        if (user.isTwoFactorAuthentication() == false || isTwoFactorAuthenticated(req)) {
+            chain.doFilter(request, response);
             return;
         }
 
-        chain.doFilter(request, response);
+        resp.sendRedirect(req.getContextPath() + "/two_factor_authn");
+    }
+
+    /**
+     * 2要素認証済みかどうかを判定する。
+     * 
+     * @param req
+     * @return trueなら2要素認証済み
+     */
+    private boolean isTwoFactorAuthenticated(final HttpServletRequest req) {
+        final HttpSession session = req.getSession();
+        final Object attribute = session.getAttribute("twoFactorAuthenticated");
+        return attribute != null;
     }
 }

@@ -3,6 +3,9 @@ package com.example.user;
 import java.security.Principal;
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 public class User implements Principal {
 
     private final String username;
@@ -14,6 +17,16 @@ public class User implements Principal {
         this.username = Objects.requireNonNull(username);
         this.password = Objects.requireNonNull(password);
         this.twoFactorAuthentication = twoFactorAuthentication;
+    }
+
+    public static User get(final HttpServletRequest request) {
+        final HttpSession session = request.getSession();
+        return (User) session.getAttribute(User.class.getName());
+    }
+
+    public void setTo(final HttpServletRequest request) {
+        final HttpSession session = request.getSession();
+        session.setAttribute(User.class.getName(), this);
     }
 
     @Override
