@@ -1,4 +1,4 @@
-package com.example;
+package com.example.user;
 
 import java.security.Principal;
 import java.util.Objects;

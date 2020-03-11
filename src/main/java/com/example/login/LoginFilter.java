@@ -1,4 +1,4 @@
-package com.example.lib;
+package com.example.login;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.example.Users;
+import com.example.user.Users;
 
 public class LoginFilter implements Filter {
 

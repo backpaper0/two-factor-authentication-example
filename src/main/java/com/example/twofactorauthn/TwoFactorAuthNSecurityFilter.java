@@ -1,4 +1,4 @@
-package com.example;
+package com.example.twofactorauthn;
 
 import java.io.IOException;
 
@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-public class TwoFactorAuthenticationSecurityFilter implements Filter {
+import com.example.user.User;
+
+public class TwoFactorAuthNSecurityFilter implements Filter {
 
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response,

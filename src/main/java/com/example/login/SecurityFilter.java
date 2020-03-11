@@ -1,4 +1,4 @@
-package com.example.lib;
+package com.example.login;
 
 import java.io.IOException;
 
@@ -20,11 +20,15 @@ public class SecurityFilter implements Filter {
         final HttpServletRequest req = (HttpServletRequest) request;
         final HttpServletResponse resp = (HttpServletResponse) response;
 
-        if (req.getUserPrincipal() == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
+        if (isLoggedIn(req)) {
+            chain.doFilter(request, response);
             return;
         }
 
-        chain.doFilter(request, response);
+        resp.sendRedirect(req.getContextPath() + "/login");
+    }
+
+    private boolean isLoggedIn(final HttpServletRequest req) {
+        return req.getUserPrincipal() != null;
     }
 }

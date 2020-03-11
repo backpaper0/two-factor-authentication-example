@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.example.user.User;
+import com.example.user.Users;
+
 @WebServlet(urlPatterns = "/account_settings")
 public class AccountSettings extends HttpServlet {
 

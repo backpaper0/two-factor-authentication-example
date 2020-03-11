@@ -1,4 +1,4 @@
-package com.example;
+package com.example.user;
 
 import java.util.HashSet;
 import java.util.Optional;
