@@ -24,7 +24,7 @@ public class TwoFactorAuthenticator implements Filter {
 
         if (req.getMethod().equals("GET")) {
             resp.setContentType("text/html; charset=UTF-8");
-            req.getRequestDispatcher("WEB-INF/views/two_factor_authz.jsp").forward(req, resp);
+            req.getRequestDispatcher("WEB-INF/views/two_factor_authn.jsp").forward(req, resp);
 
         } else if (req.getMethod().equals("POST")) {
             final String code = req.getParameter("code");

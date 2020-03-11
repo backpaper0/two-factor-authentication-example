@@ -37,7 +37,7 @@ public class LoginConfig implements ServletContextListener {
         final FilterRegistration.Dynamic twoFactorAuthenticator = sc
                 .addFilter("twoFactorAuthenticator", TwoFactorAuthenticator.class);
         twoFactorAuthenticator.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false,
-                "/two_factor_authz");
+                "/two_factor_authn");
 
         final FilterRegistration.Dynamic twoFactorAuthenticationSecurityFilter = sc.addFilter(
                 "twoFactorAuthenticationSecurityFilter",

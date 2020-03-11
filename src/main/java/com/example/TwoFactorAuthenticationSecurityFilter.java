@@ -27,7 +27,7 @@ public class TwoFactorAuthenticationSecurityFilter implements Filter {
                 .getAttribute("twoFactorAuthenticated");
 
         if (user.isTwoFactorAuthentication() && twoFactorAuthenticated == null) {
-            resp.sendRedirect(req.getContextPath() + "/two_factor_authz");
+            resp.sendRedirect(req.getContextPath() + "/two_factor_authn");
             return;
         }
 
