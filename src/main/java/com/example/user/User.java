@@ -79,10 +79,10 @@ public class User {
         return new User(username, password, twoFactorAuthN, key);
     }
 
-    public boolean testTwoFactorAuthN(final String code) {
+    public boolean testOTP(final String otp) {
         final int generated = otpGenerator.generate(key);
         final String formatted = String.format("%06d", generated);
-        return formatted.equals(code);
+        return formatted.equals(otp);
     }
 
     public String getKeyAsHex() {

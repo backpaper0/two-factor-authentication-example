@@ -36,8 +36,8 @@ public class TwoFactorAuthenticator implements Filter {
 
         if (req.getMethod().equals("POST")) {
             final User user = User.get(req);
-            final String code = req.getParameter("code");
-            if (user.testTwoFactorAuthN(code)) { //TODO
+            final String otp = req.getParameter("otp");
+            if (user.testOTP(otp)) {
                 session.setAttribute("twoFactorAuthenticated", new Object());
                 resp.sendRedirect(req.getContextPath() + "/");
             } else {
