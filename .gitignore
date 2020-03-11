@@ -1,0 +1,11 @@
+/.*
+!/.gitignore
+!/.gitattributes
+!/.mvn/
+/target/
+/*.log
+/*.iml
+/*.ipr
+/*.iws
+/node_modules/
+
