@@ -29,7 +29,7 @@ public class AccountSettings extends HttpServlet {
             out.printf("  </head>%n");
             out.printf("  <body>%n");
             out.printf("    <nav>%n");
-            out.printf("      <p><a href=\"%s/home\">戻る</a></p>%n",
+            out.printf("      <p><a href=\"%s/\">戻る</a></p>%n",
                     req.getContextPath());
             out.printf("    </nav>%n");
             out.printf("    <h1>アカウント設定</h1>%n");
